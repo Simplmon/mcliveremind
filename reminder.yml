@@ -1,0 +1,24 @@
+name: Minecraft Live Reminder
+
+on:
+  schedule:
+    - cron: "0 7 * * *"   # každý deň o 07:00 UTC (u nás 09:00 CET)
+  workflow_dispatch:       # možnosť manuálne spustiť
+
+jobs:
+  send-reminder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run reminder script
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+        run: python remind.py
